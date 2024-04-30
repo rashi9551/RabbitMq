@@ -1,7 +1,6 @@
 const amqp = require("amqplib")
 
 async function consumeMessages(){
-    console.log("ddddddddddddddddd")
     const connection = await amqp.connect('amqp://localhost')
     const channel = await connection.createChannel()
 
@@ -12,14 +11,10 @@ async function consumeMessages(){
     await channel.bindQueue(q.queue,"logExchange","Info")
 
     channel.consume(q.queue,(msg)=>{
-        const data = msg && msg.content ? JSON.parse(msg.content.toString()) : null;
-        console.log("oooooooooooooo")
+        const data =JSON.parse(msg.content.toString())
         console.log(data)
-        if (msg) {
-            channel.ack(msg);
-        }
+        channel.ack(msg);
     })
-console.log("ggggggggggggggggg")
 }
 
 consumeMessages()
